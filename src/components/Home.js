@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Date from './Date';
-import { Container, Card, CardBody, CardTitle, CardSubtitle } from 'reactstrap';
+import {
+    Container, Card, CardBody,
+    CardTitle, CardSubtitle
+} from 'reactstrap';
+
 
 
 const InfoCard = ({bill}) => {
@@ -17,11 +21,17 @@ const InfoCard = ({bill}) => {
     );
 };
 
+
 const Home = () => {
+
     const [bills, setBills] = useState([]);
     const getBills = () => {
         axios
-            .get('http://127.0.0.1:8000/bills/')
+            .get('http://127.0.0.1:8000/bills/', {
+                'headers': {
+                    'Authorization': "Token " + localStorage.getItem('token'),
+                }
+            })
             .then(res => {
                 setBills(res.data);
             }).catch(err => {
@@ -33,6 +43,7 @@ const Home = () => {
         getBills();
     }, []);
 
+
     return (
         <Container className="col-md-6 col-lg-4">
             {
@@ -42,6 +53,7 @@ const Home = () => {
             }
         </Container>
     );
+
 };
 
 
