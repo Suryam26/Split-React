@@ -5,6 +5,7 @@ import {
     FormGroup, Input, Card,
     CardBody, CardTitle
 } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 
 
@@ -61,7 +62,7 @@ const Login = ({ logIn }) => {
 
                         <hr className="my-4" />
 
-                        <Button color="success" block>Create New Account</Button>
+                        <Link to="/signup" className="btn btn-success btn-block">Create New Account</Link>
 
                     </CardBody>
 
