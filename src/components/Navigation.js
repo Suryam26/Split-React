@@ -5,6 +5,8 @@ import {
     NavbarToggler, NavbarBrand, Nav,
     NavItem, NavLink, Button
 } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -24,7 +26,7 @@ const NavigationBar = (props) => {
             .then(res => {
                 setUsername(res.data.first_name);
             }).catch(err => {
-                console.log(err.response.data);
+                console.log(err);
             });
     };
     useEffect(() => {
@@ -49,7 +51,9 @@ const NavigationBar = (props) => {
                 <NavLink>Hi, { username }</NavLink>
             </NavItem>
             <NavItem>
-                <Button onClick={props.signOut}>Sign Out</Button>
+                <Button onClick={props.signOut}>
+                    <FontAwesomeIcon icon={faSignOutAlt} /> Sign Out
+                </Button>
             </NavItem>
         </>;
 

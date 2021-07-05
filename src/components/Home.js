@@ -3,8 +3,9 @@ import axios from 'axios';
 import Date from './Date';
 import {
     Container, Card, CardBody,
-    CardTitle, CardSubtitle
+    CardTitle, CardSubtitle, Row
 } from 'reactstrap';
+import AddBillModal from './BillModal';
 
 
 
@@ -44,13 +45,25 @@ const Home = () => {
     }, []);
 
 
+    const emptyMsg = <h4 className="my-3 text-center">You have no bills</h4>;
+    const listBills =
+        bills.map(bill => (
+            <InfoCard key={bill.id} bill={bill} />
+        ));
+    
+    
     return (
         <Container className="col-md-6 col-lg-4">
-            {
-                bills.map(bill => (
-                    <InfoCard key={bill.id} bill={ bill }/>
-                ))
-            }
+
+            <Row className="px-3 mt-4">
+                <h2 className="m-0">Bills</h2>
+                <AddBillModal />
+            </Row>
+            
+            <hr />
+            
+            {bills.length > 0 ? listBills : emptyMsg}
+
         </Container>
     );
 
