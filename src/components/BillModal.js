@@ -4,7 +4,7 @@ import axios from 'axios';
 import {
     Modal, ModalHeader, ModalBody,
     ModalFooter, Button, Form,
-    FormGroup, Label, Input
+    FormGroup, Label, Input, FormFeedback
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
@@ -14,11 +14,13 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 const AddBillModal = () => {
 
     let history = useHistory();
+    
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
 
+    const [error, setError] = useState(false);
     const [inputs, setInputs] = useState({
-        name: "",
+        title: "",
         date: "",
     });
     const onChangeHandler = useCallback(
@@ -29,7 +31,7 @@ const AddBillModal = () => {
         e.preventDefault();
         axios
             .post('http://127.0.0.1:8000/bills/', {
-                "name": inputs.name,
+                "title": inputs.title,
                 "date": inputs.date
             },
             {
@@ -41,9 +43,10 @@ const AddBillModal = () => {
             .then(res => {
                 history.push("/");
             }).catch(err => {
-                console.log(err);
+                setError(true);
             });
     };
+
 
     return (
         <div className="ml-auto">
@@ -59,15 +62,17 @@ const AddBillModal = () => {
                 <Form onSubmit={submit}>
                     <ModalBody>
                         <FormGroup>
-                            <Label for="name">Title</Label>
+                            <Label for="title">Title</Label>
                             <Input
                                 type="text"
-                                name="name"
-                                value={inputs.name}
+                                name="title"
+                                value={inputs.title}
                                 onChange={onChangeHandler}
-                                id="name"
+                                id="title"
                                 placeholder="Enter a title"
+                                invalid={error}
                             />
+                            <FormFeedback>A Bill with this title already exists.</FormFeedback>
                         </FormGroup>
                         <FormGroup>
                             <Label for="date">Date</Label>

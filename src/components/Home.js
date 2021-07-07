@@ -14,7 +14,7 @@ const InfoCard = ({bill}) => {
         <a href="/">
             <Card className="my-3">
                 <CardBody>
-                    <CardTitle tag="h5">{ bill.name }</CardTitle>
+                    <CardTitle tag="h5">{ bill.title }</CardTitle>
                     <CardSubtitle tag="h6" className="mb-2 text-muted">{ Date(bill.date) }</CardSubtitle>
                 </CardBody>
             </Card>
