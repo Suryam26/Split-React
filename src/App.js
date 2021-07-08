@@ -4,6 +4,7 @@ import NavigationBar from "./components/Navigation";
 import Home from './components/Home';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import BillDetail from './components/BillDetail';
 
 
 
@@ -22,6 +23,7 @@ const App = () => {
     const Authorized =
         <Switch>
             <Route path="/home" component={Home} />
+            <Route path="/bill/:billId" component={BillDetail} />
             <Redirect to="/home" />
         </Switch>;
     const Unauthorized =

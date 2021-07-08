@@ -9,9 +9,9 @@ import AddBillModal from './BillModal';
 
 
 
-const InfoCard = ({bill}) => {
+const InfoCard = ({ bill }) => {
     return (
-        <a href="/">
+        <a href={`/bill/${bill.id}`}>
             <Card className="my-3">
                 <CardBody>
                     <CardTitle tag="h5">{ bill.title }</CardTitle>

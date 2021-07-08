@@ -41,7 +41,7 @@ const AddBillModal = () => {
             }
             )
             .then(res => {
-                history.push("/");
+                history.push(`/bill/${res.data.id}`);
             }).catch(err => {
                 setError(true);
             });
