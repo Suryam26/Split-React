@@ -4,6 +4,7 @@ import axios from 'axios';
 import Date from './Date';
 import { Container, Card, CardBody,
     CardTitle, CardSubtitle } from 'reactstrap';
+import Items from './Items';
 
 
 
@@ -23,7 +24,7 @@ const BillDetail = (props) => {
 
     let history = useHistory();
 
-    const [bill, setBill] = useState();
+    const [bill, setBill] = useState({});
     useEffect(() => {
         const getBill = () => {
             axios
@@ -46,12 +47,14 @@ const BillDetail = (props) => {
     const content =
         <>
             <BillInfo bill={bill} />
+            <Items items={bill.items} />
         </>;
     
 
     return (
         <Container className="col-md-6 col-lg-4">
-            {bill ? content : <h5 className="text-center">Featching ...</h5>}
+            {Object.keys(bill).length === 0 && bill.constructor === Object ?
+                <h5 className="text-center">Featching ...</h5> : content}
         </Container>
     );
 
