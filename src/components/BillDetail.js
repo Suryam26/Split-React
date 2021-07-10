@@ -47,7 +47,7 @@ const BillDetail = (props) => {
     const content =
         <>
             <BillInfo bill={bill} />
-            <Items items={bill.items} />
+            <Items items={bill.items} id={bill.id} />
         </>;
     
 

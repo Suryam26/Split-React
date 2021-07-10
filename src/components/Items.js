@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Button, Card, CardBody, } from 'reactstrap';
+import { Row, Card, CardBody, } from 'reactstrap';
+import AddItemModal from './ItemModal';
 import axios from 'axios';
 
 
@@ -36,10 +37,16 @@ const ItemCard = ({ itemURL }) => {
 };
 
 
-const Items = ({ items }) => {
+const Items = ({ items, id }) => {
     
+    const [itemsList, setItemsList] = useState(items);
+    const AddItems = (newItem) => {
+        let newItemsList = [...itemsList, newItem];
+        setItemsList(newItemsList);
+    };
+
     const displayList =
-        items.map(itemURL => (
+        itemsList.map(itemURL => (
             <ItemCard key={itemURL.toString()} itemURL={itemURL} />
         ));
     const emptyMsg = <div className="text-center shadow-sm p-3 bg-light rounded">No items found</div>;
@@ -52,12 +59,12 @@ const Items = ({ items }) => {
 
                     <Row className="px-3">
                         <h2 className="m-0">Items</h2>
-                        <Button className="ml-auto" color="success">Add Item</Button>
+                        <AddItemModal billId={id} addItems={AddItems}/>
                     </Row>
 
                     <hr />
                     
-                    {items.length > 0 ? displayList : emptyMsg}
+                    {itemsList.length > 0 ? displayList : emptyMsg}
                     
                 </CardBody>
             </Card>
