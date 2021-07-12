@@ -37,13 +37,7 @@ const ItemCard = ({ itemURL }) => {
 };
 
 
-const Items = ({ items, id }) => {
-    
-    const [itemsList, setItemsList] = useState(items);
-    const AddItems = (newItem) => {
-        let newItemsList = [...itemsList, newItem];
-        setItemsList(newItemsList);
-    };
+const Items = ({ itemsList, addItems, id }) => {
 
     const displayList =
         itemsList.map(itemURL => (
@@ -59,7 +53,7 @@ const Items = ({ items, id }) => {
 
                     <Row className="px-3">
                         <h2 className="m-0">Items</h2>
-                        <AddItemModal billId={id} addItems={AddItems}/>
+                        <AddItemModal billId={id} addItems={addItems}/>
                     </Row>
 
                     <hr />
