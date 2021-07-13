@@ -1,18 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import { useHistory } from 'react-router';
 import axios from 'axios';
-import {
-    Modal, ModalHeader, ModalBody,
-    ModalFooter, Button, Form,
-    FormGroup, Label, Input, FormFeedback
-} from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button,
+    Form, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { API_URL, AUTH_HEADER } from '../constants';
 
 
 
 const AddBillModal = () => {
-
     let history = useHistory();
     
     const [modal, setModal] = useState(false);
@@ -23,23 +20,17 @@ const AddBillModal = () => {
         title: "",
         date: "",
     });
+    
     const onChangeHandler = useCallback(
         ({ target: { name, value } }) => setInputs(state => ({ ...state, [name]: value }))
         , []);
-    
     const submit = e => {
         e.preventDefault();
         axios
-            .post('http://127.0.0.1:8000/bills/', {
+            .post(`${API_URL}bills/`, {
                 "title": inputs.title,
                 "date": inputs.date
-            },
-            {
-                'headers': {
-                    'Authorization': "Token " + localStorage.getItem('token'),
-                }
-            }
-            )
+            }, AUTH_HEADER(localStorage.getItem('token')))
             .then(res => {
                 history.push(`/bill/${res.data.id}`);
             }).catch(err => {
@@ -47,18 +38,13 @@ const AddBillModal = () => {
             });
     };
 
-
     return (
         <div className="ml-auto">
-
             <Button color="success" onClick={toggle}>
                 <FontAwesomeIcon icon={faPlus} /> New Bill
             </Button>
-            
             <Modal isOpen={modal} toggle={toggle}>
-
                 <ModalHeader toggle={toggle}>New Bill</ModalHeader>
-
                 <Form onSubmit={submit}>
                     <ModalBody>
                         <FormGroup>
@@ -89,12 +75,9 @@ const AddBillModal = () => {
                         <Button color="primary">Add Bill</Button>
                     </ModalFooter>
                 </Form>
-
             </Modal>
-
         </div>
     );
-
 }
 
 

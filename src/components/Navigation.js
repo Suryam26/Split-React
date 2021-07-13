@@ -1,34 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {
-    Container, Collapse, Navbar,
-    NavbarToggler, NavbarBrand, Nav,
-    NavItem, NavLink, Button
-} from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { Container, Collapse, Navbar, NavbarToggler,
+    NavbarBrand, Nav, NavItem, NavLink, Button } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { API_URL, AUTH_HEADER } from '../constants';
 
 
 
 const NavigationBar = (props) => {
-
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
 
     const [username, setUsername] = useState("");    
     const fetchUsername = () => {
         axios
-            .get('http://127.0.0.1:8000/account/user/', {
-                'headers': {
-                    'Authorization': "Token " + localStorage.getItem('token'),
-                }
-            })
+            .get(`${API_URL}account/user/`, AUTH_HEADER(localStorage.getItem('token')))
             .then(res => {
                 setUsername(res.data.first_name);
             }).catch(err => {
                 console.log(err);
             });
     };
+    
     useEffect(() => {
         if (props.loggedIn) {
             fetchUsername();
@@ -45,6 +39,7 @@ const NavigationBar = (props) => {
                 <NavLink href="/signup">Sign-Up</NavLink>
             </NavItem>
         </>;
+    
     const signOut =
         <>
             <NavItem>
@@ -61,24 +56,18 @@ const NavigationBar = (props) => {
     return (
         <div>
             <Navbar color="dark" dark expand="md">
-
                 <Container>
-
                     <NavbarBrand href="/home">SPL / T</NavbarBrand>
-
                     <NavbarToggler onClick={toggle} />
                     <Collapse isOpen={isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             { props.loggedIn ? signOut : signIn}
                         </Nav>
                     </Collapse>
-
                 </Container>
-
             </Navbar>
         </div>
     );
-
 }
 
 

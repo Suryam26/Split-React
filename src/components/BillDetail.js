@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import axios from 'axios';
-import Date from './Date';
 import { Container, Card, CardBody,
     CardTitle, CardSubtitle, Row, Col } from 'reactstrap';
 import Items from './Items';
 import Users from './Users';
+import Date from './Date';
+import { API_URL, AUTH_HEADER } from '../constants';
 
 
 
@@ -22,14 +23,12 @@ const BillInfo = ({ bill }) => {
 
 
 const Content = ({ bill }) => {
-
     const [itemsList, setItemsList] = useState(bill.items);
+    const [usersList, setUsersList] = useState(bill.consumers);
     const AddItems = (newItem) => {
         let newItemsList = [...itemsList, newItem];
         setItemsList(newItemsList);
     };
-
-    const [usersList, setUsersList] = useState(bill.consumers);
     const AddUser = (newUser) => {
         let newUsersList = [...usersList, newUser];
         setUsersList(newUsersList);
@@ -59,28 +58,22 @@ const Content = ({ bill }) => {
 
 
 const BillDetail = (props) => {
-
     let history = useHistory();
-
     const [bill, setBill] = useState({});
+
     useEffect(() => {
         const getBill = () => {
             axios
-                .get(`http://127.0.0.1:8000/bills/${ props.match.params.billId }`, {
-                    'headers': {
-                        'Authorization': "Token " + localStorage.getItem('token'),
-                    }
-                })
+                .get(`${API_URL}bills/${props.match.params.billId}`,
+                    AUTH_HEADER(localStorage.getItem('token')))
                 .then(res => {
                     setBill(res.data);
                 }).catch(err => {
                     history.push("/");
                 });
         };
-
         getBill();
     }, [props.match.params.billId, history]);
-
 
     return (
         <Container>
@@ -90,7 +83,6 @@ const BillDetail = (props) => {
             </Row>
         </Container>
     );
-
 };
 
 

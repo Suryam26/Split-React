@@ -1,6 +1,6 @@
 const FetchItemName = (itemID, itemList) => {
-    
     const itemName = [];
+    
     for (const i in itemID) {
         for (const j in itemList) {
             if (itemID[i] === itemList[j].id) {

@@ -6,11 +6,11 @@ import FetchItemName from './FetchItemName';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import AddUserModal from './UserModal';
+import { AUTH_HEADER } from '../constants';
 
 
 
 const UserCard = ({ userURL, itemList }) => {
-
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
 
@@ -18,11 +18,7 @@ const UserCard = ({ userURL, itemList }) => {
     useEffect(() => {
         const fetchItem = () => {
             axios
-                .get(userURL, {
-                    'headers': {
-                        'Authorization': "Token " + localStorage.getItem('token'),
-                    }
-                })
+                .get(userURL, AUTH_HEADER(localStorage.getItem('token')))
                 .then(res => {
                     setUser(res.data);
                 }).catch(err => {
@@ -36,17 +32,14 @@ const UserCard = ({ userURL, itemList }) => {
     const downArrow = <FontAwesomeIcon icon={faChevronDown} />;
     const upArrow = <FontAwesomeIcon icon={faChevronUp} />;
 
-    
     return (
         <Card className="mb-2 shadow-sm">
-
             <CardHeader className="py-4 bg-white clearfix" style={{cursor: "pointer"}} onClick={toggle}>
                 {user.name}
                 <span className="float-right">
                     {isOpen ? upArrow : downArrow}
                 </span>
             </CardHeader>
-                
             <Collapse isOpen={isOpen}>
                 <CardBody className="p-4 bg-light">
                     <div>
@@ -58,43 +51,32 @@ const UserCard = ({ userURL, itemList }) => {
                     </div>
                 </CardBody>
             </Collapse>
-
         </Card>
     );
-
 };
 
 
 const Users = ({ usersList, addUser, items, id }) => {
-    
     const itemList = FetchItems(items);
-
-    const displayList =
-        usersList.map(userURL => (
-            <UserCard key={userURL.toString()} itemList={itemList} userURL={userURL} />
-        ));
     const emptyMsg = <div className="text-center shadow-sm p-3 bg-light rounded">No users added</div>;
+    const displayList = usersList.map(userURL => (
+        <UserCard key={userURL.toString()} itemList={itemList} userURL={userURL} />
+    ));
     
-
     return (
         <>
             <Card className="my-3 shadow-sm">
                 <CardBody>
-
                     <Row className="px-3">
                         <h2 className="m-0">Users</h2>
                         <AddUserModal billId={id} addItems={addUser} itemList={itemList} />
                     </Row>
-
                     <hr />
-                    
                     {usersList.length > 0 ? displayList : emptyMsg}
-                    
                 </CardBody>
             </Card>
         </>
     );
-
 };
 
 

@@ -4,18 +4,18 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form,
     FormGroup, Label, Input, FormFeedback, CustomInput} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { API_URL, AUTH_HEADER } from '../constants';
 
 
 
 const AddUserModal = ({ billId, addItems, itemList }) => {
-    
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
 
     const [name, setName] = useState("");
     const [items, setItems] = useState([]);
     const [error, setError] = useState(false);
-
+    
     const updateName = (e) => {
         setName(e.target.value);
     };
@@ -31,53 +31,39 @@ const AddUserModal = ({ billId, addItems, itemList }) => {
         setItems([...newItems]);
     };
 
-    
-    
     const submit = e => {
         e.preventDefault();
         axios
-            .post('http://127.0.0.1:8000/consumers/', {
+            .post(`${API_URL}consumers/`, {
                 "name": name,
                 "bill": billId,
                 "items": items,
-            },
-            {
-                'headers': {
-                    'Authorization': "Token " + localStorage.getItem('token'),
-                }
-            }
-            )
+            }, AUTH_HEADER(localStorage.getItem('token')))
             .then(res => {
-                addItems(`http://127.0.0.1:8000/consumers/${ res.data.id }`);
+                addItems(`${API_URL}consumers/${ res.data.id }`);
                 toggle();
             }).catch(err => {
                 setError(true);
             });
     };
 
-    const selectItems =
-        <>
-            {itemList.map(item => (
-                <CustomInput
-                    key={item.id}
-                    type="checkbox"
-                    id={item.id}
-                    onChange={() => updateItem(item.id)}
-                    checked={items.includes(item.id)}
-                    label={item.name}
-                    className="my-2"
-                />
-            ))}
-        </>;
-
+    const selectItems = itemList.map(item => (
+        <CustomInput
+            key={item.id}
+            type="checkbox"
+            id={item.id}
+            onChange={() => updateItem(item.id)}
+            checked={items.includes(item.id)}
+            label={item.name}
+            className="my-2"
+        />
+    ));
     
     return (
         <div className="ml-auto">
-
             <Button color="success" onClick={toggle}>
                 <FontAwesomeIcon icon={faPlus} /> New User
             </Button>
-            
             <Modal isOpen={modal} toggle={toggle}>
                 <ModalHeader toggle={toggle}>New User</ModalHeader>
                 <Form onSubmit={submit}>
@@ -104,10 +90,8 @@ const AddUserModal = ({ billId, addItems, itemList }) => {
                     </ModalFooter>
                 </Form>
             </Modal>
-
         </div>
     );
-
 }
 
 

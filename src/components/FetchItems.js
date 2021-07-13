@@ -1,15 +1,12 @@
 import axios from 'axios';
+import { AUTH_HEADER } from '../constants';
 
 const FetchItems = (items) => {
-    
     const itemsDetail = [];
+
     for (let item in items) {
         axios
-            .get(items[item], {
-                'headers': {
-                    'Authorization': "Token " + localStorage.getItem('token'),
-                }
-            })
+            .get(items[item], AUTH_HEADER(localStorage.getItem('token')))
             .then(res => {
                 itemsDetail.push(res.data);
             }).catch(err => {

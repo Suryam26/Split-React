@@ -1,17 +1,14 @@
 import React, { useState, useCallback } from 'react';
 import axios from 'axios';
-import {
-    Modal, ModalHeader, ModalBody,
-    ModalFooter, Button, Form,
-    FormGroup, Label, Input, FormFeedback
-} from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button,
+    Form, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { API_URL, AUTH_HEADER } from '../constants';
 
 
 
 const AddItemModal = ({ billId, addItems }) => {
-    
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
 
@@ -20,44 +17,33 @@ const AddItemModal = ({ billId, addItems }) => {
         name: "",
         cost: "00.00",
     });
+    
     const onChangeHandler = useCallback(
         ({ target: { name, value } }) => setInputs(state => ({ ...state, [name]: value }))
         , []);
-    
     const submit = e => {
         e.preventDefault();
         axios
-            .post('http://127.0.0.1:8000/items/', {
+            .post(`${API_URL}items/`, {
                 "name": inputs.name,
                 "cost": inputs.cost,
                 "bill": billId
-            },
-            {
-                'headers': {
-                    'Authorization': "Token " + localStorage.getItem('token'),
-                }
-            }
-            )
+            }, AUTH_HEADER(localStorage.getItem('token')))
             .then(res => {
-                addItems(`http://127.0.0.1:8000/items/${ res.data.id }`);
+                addItems(`${API_URL}items/${ res.data.id }`);
                 toggle();
             }).catch(err => {
                 setError(true);
             });
     };
 
-
     return (
         <div className="ml-auto">
-
             <Button color="success" onClick={toggle}>
                 <FontAwesomeIcon icon={faPlus} /> New Item
             </Button>
-            
             <Modal isOpen={modal} toggle={toggle}>
-
                 <ModalHeader toggle={toggle}>New Item</ModalHeader>
-
                 <Form onSubmit={submit}>
                     <ModalBody>
                         <FormGroup>
@@ -89,12 +75,9 @@ const AddItemModal = ({ billId, addItems }) => {
                         <Button color="primary">Add Item</Button>
                     </ModalFooter>
                 </Form>
-
             </Modal>
-
         </div>
     );
-
 }
 
 

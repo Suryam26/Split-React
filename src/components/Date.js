@@ -1,5 +1,4 @@
 const Date = (date) => {
-
     const months = {
         "01": "Jan",
         "02": "Feb",
@@ -14,7 +13,6 @@ const Date = (date) => {
         "11": "Nov",
         "12": "Dec"
     };
-
     const dateArr = date.split("-");
     const newDate = `${dateArr[2]} ${months[dateArr[1]]} ${dateArr[0]}`;
 

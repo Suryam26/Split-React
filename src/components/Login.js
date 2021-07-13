@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import {
-    Container, Button, Form,
-    FormGroup, Input, Card,
-    CardBody, CardTitle
-} from 'reactstrap';
+import { Container, Button, Form, FormGroup,
+    Input, Card, CardBody, CardTitle } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { API_URL } from '../constants';
 
 
 
@@ -25,9 +23,9 @@ const Login = ({ logIn }) => {
     const submit = e => {
         e.preventDefault();
         axios
-            .post('http://127.0.0.1:8000/account/login/', {
-                    "email": email,
-                    "password": password
+            .post(`${API_URL}account/login/`, {
+                "email": email,
+                "password": password
             })
             .then(res => {
                 logIn(res.data.key);
