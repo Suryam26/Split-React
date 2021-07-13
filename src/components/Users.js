@@ -3,8 +3,10 @@ import { Row, Card, CardBody, CardHeader, Badge, Collapse } from 'reactstrap';
 import axios from 'axios';
 import FetchItems from './FetchItems';
 import FetchItemName from './FetchItemName';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import AddUserModal from './UserModal';
+
 
 
 const UserCard = ({ userURL, itemList }) => {
@@ -81,7 +83,7 @@ const Users = ({ usersList, addUser, items, id }) => {
 
                     <Row className="px-3">
                         <h2 className="m-0">Users</h2>
-                        {/* <AddItemModal billId={id} addItems={addUser}/> */}
+                        <AddUserModal billId={id} addItems={addUser} itemList={itemList} />
                     </Row>
 
                     <hr />
