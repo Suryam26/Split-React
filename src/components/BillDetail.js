@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import axios from 'axios';
 import { Container, Card, CardBody,
-    CardTitle, CardSubtitle, Row, Col } from 'reactstrap';
+    CardTitle, CardSubtitle, Row, Col, CardFooter } from 'reactstrap';
 import Items from './Items';
 import Users from './Users';
 import Date from './Date';
+import BillDeleteModal from './BillDeleteModal';
+import BillEditModal from './BillEditModal';
 import { API_URL, AUTH_HEADER } from '../constants';
 
 
@@ -15,8 +17,13 @@ const BillInfo = ({ bill }) => {
         <Card className="my-3 shadow-sm">
             <CardBody className="text-center">
                 <CardTitle tag="h3">{bill.title}</CardTitle>
-                <CardSubtitle tag="h6" className="mb-2 text-muted">{ Date(bill.date) }</CardSubtitle>
+                <CardSubtitle tag="h6" className="mb-2 text-muted">{Date(bill.date)}</CardSubtitle>
             </CardBody>
+            <CardFooter className="text-right text-muted">
+                <BillEditModal bill={bill}/>
+                {' '} | {' '}
+                <BillDeleteModal id={bill.id}/>
+            </CardFooter>
         </Card>
     );
 };
