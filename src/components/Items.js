@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Card, CardBody, } from 'reactstrap';
+import { Row, Card, CardBody, Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import AddItemModal from './ItemModal';
 import axios from 'axios';
+import ItemDeleteModal from './ItemDeleteModal';
+import ItemEditModal from './ItemEditModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { AUTH_HEADER } from '../constants';
 
 
 
 const ItemCard = ({ itemURL }) => {
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const toggleDropDown = () => setDropdownOpen(prevState => !prevState);
+
+    const [editModal, setEditModal] = useState(false);
+    const toggleEdit = () => setEditModal(!editModal);
+
+    const [deleteModal, setDeleteModal] = useState(false);
+    const toggleDelete = () => setDeleteModal(!deleteModal);
+    
     const [item, setItem] = useState({});
     useEffect(() => {
         const fetchItem = () => {
@@ -20,11 +33,29 @@ const ItemCard = ({ itemURL }) => {
         fetchItem();
     }, [itemURL]);
 
+    const dropDown =
+        <Dropdown isOpen={dropdownOpen} toggle={toggleDropDown}>
+            <DropdownToggle tag="span" data-toggle="dropdown" aria-expanded={dropdownOpen}>
+                <FontAwesomeIcon icon={faEllipsisV} size="xs" />
+            </DropdownToggle>
+            <DropdownMenu right>
+                <DropdownItem onClick={toggleEdit}>
+                    <ItemEditModal item={item} modal={editModal} toggle={toggleEdit}/>
+                </DropdownItem>
+                <DropdownItem onClick={toggleDelete}>
+                    <ItemDeleteModal item={item} modal={deleteModal} toggle={toggleDelete}/>
+                </DropdownItem>
+            </DropdownMenu>
+        </Dropdown>;
+
     return (
         <Card className="mb-2 shadow-sm">
             <CardBody className="row mx-1">
                 <div className="d-inline">{item.name}</div>
                 <div className="d-inline ml-auto">Rs. {item.cost}/-</div>
+                <div className="ml-2" style={{ cursor: "pointer" }}>
+                    {dropDown}
+                </div>
             </CardBody>
         </Card>
     );
